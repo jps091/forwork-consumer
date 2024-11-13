@@ -6,16 +6,17 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public enum Result {
-    SUCCESS("발송 성공"),
-    FAIL("발송 실패"),
+public enum EmailType {
+    PAYMENT("결제"),
+    PURCHASE("구매"),
+    VERIFY("인증"),
     ;
 
     private String description;
 
     @JsonCreator
-    public static Result from(String s) {
-        for (Result status : Result.values()) {
+    public static EmailType from(String s) {
+        for (EmailType status : EmailType.values()) {
             if (status.name().equalsIgnoreCase(s)) {
                 return status;
             }

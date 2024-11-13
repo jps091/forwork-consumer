@@ -1,9 +1,9 @@
 package forwork.forwork_consumer.api.domain.orderresume.service;
 
 import forwork.forwork_consumer.api.common.infrastructure.clock.ClockHolder;
+import forwork.forwork_consumer.api.common.infrastructure.model.PurchaseMessage;
 import forwork.forwork_consumer.api.domain.orderresume.infrastructure.OrderResumeEntity;
 import forwork.forwork_consumer.api.domain.orderresume.infrastructure.OrderResumeJpaRepository;
-import forwork.forwork_consumer.api.domain.orderresume.infrastructure.OrderResumeMailMessage;
 import forwork.forwork_consumer.api.domain.resume.infrastructure.ResumeEntity;
 import forwork.forwork_consumer.api.domain.resume.service.ResumeQuantityService;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,7 @@ public class OrderStatusUpdateService {
     private final ClockHolder clockHolder;
 
     @Transactional
-    public void updateOrderStatusSent(OrderResumeMailMessage message) {
+    public void updateOrderStatusSent(PurchaseMessage message) {
         List<OrderResumeEntity> orderResumes = orderResumeJpaRepository
                 .findByOrderEntity_IdAndResumeEntity_Id(message.getOrderId(), message.getResumeId());
         orderResumes.forEach(orderResume -> orderResume.updateStatusSent(clockHolder));

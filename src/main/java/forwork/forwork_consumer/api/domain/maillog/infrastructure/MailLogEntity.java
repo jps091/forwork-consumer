@@ -1,7 +1,7 @@
 package forwork.forwork_consumer.api.domain.maillog.infrastructure;
 
 import forwork.forwork_consumer.api.common.infrastructure.BaseTimeEntity;
-import forwork.forwork_consumer.api.domain.maillog.infrastructure.enums.Result;
+import forwork.forwork_consumer.api.domain.maillog.infrastructure.enums.EmailType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
@@ -27,15 +27,16 @@ public class MailLogEntity extends BaseTimeEntity {
     @Column(length = 50, name = "email") @NotNull
     private String email;
 
-    @Column(length = 25, name = "request_id") @NotNull
+    @Column(length = 25, name = "request_id")
     private String requestId;
 
-    @Column(name = "resume_id") @NotNull
+    @Column(name = "resume_id")
     private Long resumeId;
 
     @Enumerated(EnumType.STRING)
     @NotNull
-    private Result result;
+    @Column(name = "type")
+    private EmailType emailType;
 
     @Column(length = 255, name = "error_response") // char
     private String errorResponse;
@@ -45,17 +46,16 @@ public class MailLogEntity extends BaseTimeEntity {
                 .email(email)
                 .requestId(requestId)
                 .resumeId(resumeId)
-                .result(Result.FAIL)
+                .emailType(EmailType.PURCHASE)
                 .errorResponse(e.getMessage())
                 .build();
     }
 
-    public static MailLogEntity create(String email, String requestId, Long resumeId){
+    public static MailLogEntity create(String email, EmailType type, Exception e){
         return MailLogEntity.builder()
                 .email(email)
-                .requestId(requestId)
-                .resumeId(resumeId)
-                .result(Result.SUCCESS)
+                .emailType(type)
+                .errorResponse(e.getMessage())
                 .build();
     }
 }
