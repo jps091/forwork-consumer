@@ -12,6 +12,7 @@ public enum EmailType {
     VERIFY("인증"),
     NOTICE("공지"),
     PASSWORD("임시 비밀번호"),
+    RETRY("재시도 실패")
     ;
 
     private String description;

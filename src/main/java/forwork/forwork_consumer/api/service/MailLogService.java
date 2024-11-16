@@ -7,12 +7,15 @@ import forwork.forwork_consumer.api.infrastructure.maillog.enums.EmailType;
 import forwork.forwork_consumer.api.infrastructure.maillog.MailLogEntity;
 import forwork.forwork_consumer.api.infrastructure.maillog.MailLogJpaRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class MailLogService {
     private final ObjectMapper objectMapper = new ObjectMapper();
@@ -28,6 +31,13 @@ public class MailLogService {
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void registerFailLog(String email, Exception e){
         MailLogEntity mailLog = MailLogEntity.create(email, e);
+        mailLogRepository.save(mailLog);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void registerFailLog(MessageIfs message, EmailType type){
+        String content = setMessageContent(message);
+        MailLogEntity mailLog = MailLogEntity.create(message.getEmail(), content, type);
         mailLogRepository.save(mailLog);
     }
 

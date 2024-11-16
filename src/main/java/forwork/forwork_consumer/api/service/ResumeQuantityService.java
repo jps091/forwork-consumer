@@ -19,7 +19,7 @@ public class ResumeQuantityService {
 
     private final ResumeJpaRepository resumeRepository;
 
-    public void addSalesQuantityWithOnePessimistic(List<Long> resumeIds){
+    public void increaseSalesQuantityPessimistic(List<Long> resumeIds){
         for (Long resumeId : resumeIds) {
             ResumeEntity resumeEntity = resumeRepository.findByIdWithPessimisticLock(resumeId).orElseThrow();
             resumeEntity.increaseSalesQuantity();

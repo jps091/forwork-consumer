@@ -15,11 +15,11 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.AmqpHeaders;
 import org.springframework.mail.MailAuthenticationException;
 import org.springframework.messaging.handler.annotation.Header;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 
 
-@Service
+@Component
 @Slf4j
 @RequiredArgsConstructor
 public class BuyerMailConsumer {

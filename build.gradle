@@ -39,6 +39,8 @@ dependencies {
 	// redis
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
+	testImplementation 'com.h2database:h2'
+
 
 	implementation("com.github.maricn:logback-slack-appender:1.6.1")
 	implementation 'ch.qos.logback:logback-classic'

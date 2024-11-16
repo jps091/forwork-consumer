@@ -47,6 +47,14 @@ public class MailLogEntity extends BaseTimeEntity {
                 .build();
     }
 
+    public static MailLogEntity create(String email, String content, EmailType type){
+        return MailLogEntity.builder()
+                .email(email)
+                .messageContent(content)
+                .emailType(type)
+                .build();
+    }
+
     public static MailLogEntity create(String email, Exception e){
         return MailLogEntity.builder()
                 .email(email)

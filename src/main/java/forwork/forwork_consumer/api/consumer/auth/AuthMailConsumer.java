@@ -7,7 +7,6 @@ import forwork.forwork_consumer.api.infrastructure.mail.MailSender;
 import forwork.forwork_consumer.api.infrastructure.uuid.UuidHolder;
 import forwork.forwork_consumer.api.service.MailLogService;
 import forwork.forwork_consumer.api.validator.EmailValidator;
-import io.lettuce.core.RedisConnectionException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.AmqpRejectAndDontRequeueException;
@@ -16,10 +15,10 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.AmqpHeaders;
 import org.springframework.mail.MailAuthenticationException;
 import org.springframework.messaging.handler.annotation.Header;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 
-@Service
+@Component
 @Slf4j
 @RequiredArgsConstructor
 public class AuthMailConsumer {
