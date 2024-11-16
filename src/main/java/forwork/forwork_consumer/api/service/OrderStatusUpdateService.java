@@ -20,7 +20,7 @@ public class OrderStatusUpdateService {
     private final ClockHolder clockHolder;
 
     @Transactional
-    public void updateOrderStatusSent(BuyerMessage message) {
+    public void updateOrderStatusSent(BuyerMessage message){
         List<OrderResumeEntity> orderResumes = orderResumeJpaRepository
                 .findByOrderEntity_IdAndResumeEntity_Id(message.getOrderId(), message.getResumeId());
         orderResumes.forEach(orderResume -> orderResume.updateStatusSent(clockHolder));
@@ -31,6 +31,7 @@ public class OrderStatusUpdateService {
                 .map(ResumeEntity::getId)
                 .toList();
 
-        resumeQuantityService.addSalesQuantityWithOnePessimistic(resumeIds); // 판매량 1증가
+        resumeQuantityService.increaseSalesQuantityPessimistic(resumeIds); // 판매량 1증가
+        //resumeQuantityService.increaseSalesQuantity(resumeIds); // 판매량 1증가
     }
 }
