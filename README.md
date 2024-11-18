@@ -7,4 +7,4 @@
 ## 🚴 Exchangee - Queue 동작 흐름 
 자세한 설명은 [여기](https://github.com/jps091/for-work/wiki/%EC%84%9C%EB%B9%84%EC%8A%A4%EC%9D%98-%ED%95%B5%EC%8B%AC-%EA%B8%B0%EB%8A%A5%EC%9D%B8-%EB%A9%94%EC%9D%BC-%EB%B0%9C%EC%86%A1-%EA%B8%B0%EB%8A%A5-%EB%B9%84%EB%8F%99%EA%B8%B0-%EA%B4%80%EB%A0%A8-%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98-%EA%B3%A0%EB%AF%BC)를 클릭 해주세요.
 
-<img width="900" height="400" alt="image" src="https://github.com/user-attachments/assets/3fe56243-1ec8-469c-af38-57801ddb06d2">
+<img width="1000" height="450" alt="image" src="https://github.com/user-attachments/assets/96a366f7-16a0-43bd-9b3c-a6839dbc599e">
