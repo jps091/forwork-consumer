@@ -32,7 +32,7 @@ public class DlqConsumer {
     @Value("${spring.rabbitmq.listener.simple.retry.max-attempts}")
     private int retryCount;
 
-    @RabbitListener(queues = RETRY_QUEUE)
+    @RabbitListener(queues = RETRY_QUEUE, containerFactory = "customRabbitListenerContainerFactory")
     public void processFailedMessagesRequeue(Message failedMessage) {
         Integer retriesCnt = (Integer) failedMessage.getMessageProperties().getHeaders()
                 .get(RETRY_COUNT_HEADER);

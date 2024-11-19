@@ -1,0 +1,9 @@
+FROM openjdk:17-jdk-slim
+
+WORKDIR '/app'
+
+COPY forwork-consumer-0.0.1-SNAPSHOT.jar /app/app.jar
+
+
+# -javaagent 옵션을 추가하여 애플리케이션을 실행합니다.
+ENTRYPOINT ["java", "-jar", "/app/app.jar"]

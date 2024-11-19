@@ -13,6 +13,7 @@ import org.springframework.amqp.AmqpRejectAndDontRequeueException;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.AmqpHeaders;
+import org.springframework.data.redis.RedisConnectionFailureException;
 import org.springframework.mail.MailAuthenticationException;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Component;
@@ -31,14 +32,14 @@ public class AuthMailConsumer {
     private final UuidHolder uuidHolder;
     private final RabbitTemplate rabbitTemplate;
 
-    @RabbitListener(queues = VERIFY_QUEUE)
+    @RabbitListener(queues = VERIFY_QUEUE, containerFactory = "customRabbitListenerContainerFactory")
     public void sendVerifyCodeMail(String email, @Header(AmqpHeaders.DELIVERY_TAG) long deliveryTag) {
         try {
             AuthMessage authMessage = createMessage(email);
             EmailValidator.validate(authMessage);
             mailSender.send(authMessage);
 
-        } catch (MailAuthenticationException | InvalidEmailException e) {
+        } catch (MailAuthenticationException | InvalidEmailException | RedisConnectionFailureException e) {
             handleDiscardException(email, deliveryTag, e);
         } catch (Exception e) {
             throw new AmqpRejectAndDontRequeueException(e);

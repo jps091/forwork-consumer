@@ -22,7 +22,7 @@ public class TempPasswordMailConsumer extends MailConsumer<TempPasswordMessage> 
         super(mailSender, mailLogService, rabbitTemplate);
     }
 
-    @RabbitListener(queues = USER_TEMP_PASSWORD_QUEUE)
+    @RabbitListener(queues = USER_TEMP_PASSWORD_QUEUE, containerFactory = "customRabbitListenerContainerFactory")
     public void sendTempPasswordMail(TempPasswordMessage message, @Header(AmqpHeaders.DELIVERY_TAG) long deliveryTag) {
         consumeMessage(message, EmailType.PASSWORD, deliveryTag);
     }

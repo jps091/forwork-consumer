@@ -24,7 +24,7 @@ public class NoticeMailConsumer extends MailConsumer<NoticeMessage> {
         super(mailSender, mailLogService, rabbitTemplate);
     }
 
-    @RabbitListener(queues = USER_NOTICE_QUEUE)
+    @RabbitListener(queues = USER_NOTICE_QUEUE, containerFactory = "customRabbitListenerContainerFactory")
     public void sendSalesRequestResultMail(NoticeMessage message, @Header(AmqpHeaders.DELIVERY_TAG) long deliveryTag) {
         consumeMessage(message, EmailType.NOTICE, deliveryTag);
     }
