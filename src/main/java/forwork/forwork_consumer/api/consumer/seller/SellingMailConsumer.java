@@ -22,7 +22,7 @@ public class SellingMailConsumer extends MailConsumer<SalesRequestResultMessage>
         super(mailSender, mailLogService, rabbitTemplate);
     }
 
-    @RabbitListener(queues = USER_SELLER_QUEUE)
+    @RabbitListener(queues = USER_SELLER_QUEUE, containerFactory = "customRabbitListenerContainerFactory")
     public void sendSalesRequestResultMail(SalesRequestResultMessage message, @Header(AmqpHeaders.DELIVERY_TAG) long deliveryTag) {
         consumeMessage(message, EmailType.NOTICE, deliveryTag);
     }

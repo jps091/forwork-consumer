@@ -8,9 +8,8 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 public class ForworkConsumerApplication {
 
 	public static void main(String[] args) {
-		new SpringApplicationBuilder(SpringApplicationBuilder.class)
-				.profiles("local")
+		new SpringApplicationBuilder(ForworkConsumerApplication.class)
+				.profiles("prod")
 				.run(args);
 	}
-
 }

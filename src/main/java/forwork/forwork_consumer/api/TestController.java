@@ -23,4 +23,10 @@ public class TestController {
         resumeQuantityService.increaseSalesQuantityPessimistic(List.of(1L));
         return new ResponseEntity<>("confirm", HttpStatus.OK);
     }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/")
+    public ResponseEntity<String> home(
+    ){
+        return new ResponseEntity<>("home", HttpStatus.OK);
+    }
 }

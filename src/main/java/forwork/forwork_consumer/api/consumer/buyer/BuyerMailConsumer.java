@@ -30,7 +30,7 @@ public class BuyerMailConsumer {
     private final OrderStatusUpdateService orderStatusUpdateService;
     private final RabbitTemplate rabbitTemplate;
 
-    @RabbitListener(queues = USER_BUYER_QUEUE)
+    @RabbitListener(queues = USER_BUYER_QUEUE, containerFactory = "customRabbitListenerContainerFactory")
     public void sendBuyerMail(BuyerMessage message, @Header(AmqpHeaders.DELIVERY_TAG) long deliveryTag){
         try {
             log.info("sendBuyerMail={}", message);
