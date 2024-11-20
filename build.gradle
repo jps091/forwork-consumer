@@ -36,7 +36,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 
-
+	//aws ses
+	implementation 'software.amazon.awssdk:ses:2.20.39'
 
 	// redis
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
