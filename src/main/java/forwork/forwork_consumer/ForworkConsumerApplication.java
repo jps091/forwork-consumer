@@ -9,7 +9,7 @@ public class ForworkConsumerApplication {
 
 	public static void main(String[] args) {
 		new SpringApplicationBuilder(ForworkConsumerApplication.class)
-				.profiles("prod")
+				.profiles("local")
 				.run(args);
 	}
 }
