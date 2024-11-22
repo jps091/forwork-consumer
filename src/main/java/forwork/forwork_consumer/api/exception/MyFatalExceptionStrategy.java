@@ -1,12 +1,13 @@
 package forwork.forwork_consumer.api.exception;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.listener.ConditionalRejectingErrorHandler;
 import org.springframework.amqp.rabbit.listener.FatalExceptionStrategy;
 import org.springframework.data.redis.RedisConnectionFailureException;
 import org.springframework.mail.MailAuthenticationException;
-@Slf4j
-public class CustomFatalExceptionStrategy implements FatalExceptionStrategy {
+import org.springframework.stereotype.Component;
+
+@Component
+public class MyFatalExceptionStrategy implements FatalExceptionStrategy {
 
     private final FatalExceptionStrategy fatalExceptionStrategy = new ConditionalRejectingErrorHandler.DefaultExceptionStrategy();
 
@@ -15,11 +16,10 @@ public class CustomFatalExceptionStrategy implements FatalExceptionStrategy {
      */
     @Override
     public boolean isFatal(Throwable t) {
-        log.error("Cause of exception: ",t.getCause());
         return fatalExceptionStrategy.isFatal(t)
                 || t.getCause() instanceof CustomSesException
                 || t.getCause() instanceof RedisConnectionFailureException
-                || t.getCause() instanceof MailAuthenticationException;
-                //|| t.getCause() instanceof InvalidEmailException;
+                || t.getCause() instanceof MailAuthenticationException
+                || t.getCause() instanceof InvalidEmailException;
     }
 }

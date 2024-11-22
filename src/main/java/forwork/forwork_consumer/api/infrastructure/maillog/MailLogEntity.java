@@ -1,7 +1,6 @@
 package forwork.forwork_consumer.api.infrastructure.maillog;
 
 import forwork.forwork_consumer.api.infrastructure.BaseTimeEntity;
-import forwork.forwork_consumer.api.infrastructure.maillog.enums.EmailType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
@@ -27,10 +26,6 @@ public class MailLogEntity extends BaseTimeEntity {
     @Column(length = 50, name = "email") @NotNull
     private String email;
 
-    @Enumerated(EnumType.STRING)
-    @NotNull
-    @Column(name = "type")
-    private EmailType emailType;
 
     @Column(length = 255, name = "error_response") // char
     private String errorResponse;
@@ -38,28 +33,18 @@ public class MailLogEntity extends BaseTimeEntity {
     @Column(length = 300, name = "message_content") // 직렬화된 메시지 내용
     private String messageContent;
 
-    public static MailLogEntity create(String email, String content, EmailType type, Exception e){
+    public static MailLogEntity create(String email, String content, Throwable e){
         return MailLogEntity.builder()
                 .email(email)
                 .messageContent(content)
-                .emailType(type)
                 .errorResponse(e.getMessage())
                 .build();
     }
 
-    public static MailLogEntity create(String email, String content, EmailType type){
+    public static MailLogEntity create(String email, String content){
         return MailLogEntity.builder()
                 .email(email)
                 .messageContent(content)
-                .emailType(type)
-                .build();
-    }
-
-    public static MailLogEntity create(String email, Exception e){
-        return MailLogEntity.builder()
-                .email(email)
-                .emailType(EmailType.VERIFY)
-                .errorResponse(e.getMessage())
                 .build();
     }
 }

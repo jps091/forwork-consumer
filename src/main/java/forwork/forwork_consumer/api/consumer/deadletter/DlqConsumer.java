@@ -3,7 +3,6 @@ package forwork.forwork_consumer.api.consumer.deadletter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import forwork.forwork_consumer.api.consumer.deadletter.message.FailMessage;
-import forwork.forwork_consumer.api.infrastructure.maillog.enums.EmailType;
 import forwork.forwork_consumer.api.service.MailLogService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,7 +40,7 @@ public class DlqConsumer {
         }
         if (retriesCnt >= retryCount) {
             retryMailLogRegister(failedMessage);
-            log.error("Discarding message");
+            log.error("DLQ retry fail message discarding");
             return;
         }
         failedMessage.getMessageProperties().getHeaders().put(RETRY_COUNT_HEADER, ++retriesCnt);
@@ -61,7 +60,7 @@ public class DlqConsumer {
     private void retryMailLogRegister(Message failedMessage) {
         String messageBody = new String(failedMessage.getBody(), StandardCharsets.UTF_8);
         FailMessage message = parsing(messageBody);
-        mailLogService.registerFailLog(message, EmailType.RETRY);
+        mailLogService.registerFailLog(message);
     }
 
     private FailMessage parsing(String messageBody) {
