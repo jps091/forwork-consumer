@@ -36,14 +36,22 @@ public class AminInquiryMailConsumer{
     public void sendVerifyCodeMail(AdminInquiryMessage message, @Header(AmqpHeaders.DELIVERY_TAG) long deliveryTag) {
         try {
             EmailValidator.validate(message);
-            mailSender.sendBySes(message);
-
-        } catch (CustomSesException | InvalidEmailException e) {
-            handleDiscardException(message, deliveryTag, e);
-        } catch (Exception e) {
-            throw new AmqpRejectAndDontRequeueException(e);
+            mailSender.send(message);
+        } catch (CustomSesException e) {
+            throw new CustomSesException("ses", e);
         }
     }
+//    public void sendVerifyCodeMail(AdminInquiryMessage message, @Header(AmqpHeaders.DELIVERY_TAG) long deliveryTag) {
+//        try {
+//            EmailValidator.validate(message);
+//            mailSender.sendBySes(message);
+//
+//        } catch (CustomSesException | InvalidEmailException e) {
+//            handleDiscardException(message, deliveryTag, e);
+//        } catch (Exception e) {
+//            throw new AmqpRejectAndDontRequeueException(e);
+//        }
+//    }
 
     private void handleDiscardException(AdminInquiryMessage message, long deliveryTag, Exception e) {
         String email = message.getEmail();

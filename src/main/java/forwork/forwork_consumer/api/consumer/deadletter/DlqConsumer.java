@@ -54,7 +54,7 @@ public class DlqConsumer {
             log.error("exchange not valid={}", failedMessage);
             return;
         }
-
+        log.info("Retrying message for the {} time", retriesCnt);
         rabbitTemplate.send(originalExchange, originalRoutingKey, failedMessage);
     }
 
