@@ -1,7 +1,8 @@
 package forwork.forwork_consumer.api.consumer.seller;
 
 import forwork.forwork_consumer.api.consumer.MailConsumer;
-import forwork.forwork_consumer.api.consumer.seller.message.SellerMessage;
+import forwork.forwork_consumer.api.consumer.seller.message.SalesRequestResultMessage;
+import forwork.forwork_consumer.api.consumer.seller.message.SellingMessage;
 import forwork.forwork_consumer.api.infrastructure.mail.MailSender;
 import forwork.forwork_consumer.api.infrastructure.maillog.enums.EmailType;
 import forwork.forwork_consumer.api.service.MailLogService;
@@ -15,16 +16,16 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
-public class SalesRequestResultMailConsumer extends MailConsumer<SellerMessage> {
+public class SalesRequestResultMailConsumer extends MailConsumer<SalesRequestResultMessage> {
 
-    private static final String USER_SELLER_QUEUE = "user.seller.queue";
+    private static final String USER_SELLER_RESULT = "user.seller.result.q";
 
     public SalesRequestResultMailConsumer(MailSender mailSender, MailLogService mailLogService, RabbitTemplate rabbitTemplate) {
         super(mailSender, mailLogService, rabbitTemplate);
     }
 
-    @RabbitListener(queues = USER_SELLER_QUEUE, containerFactory = "customRabbitListenerContainerFactory")
-    public void sendSellerMail(SellerMessage message, @Header(AmqpHeaders.DELIVERY_TAG) long deliveryTag) {
+    @RabbitListener(queues = USER_SELLER_RESULT, containerFactory = "customRabbitListenerContainerFactory")
+    public void sendSalesRequestResultMail(SalesRequestResultMessage message, @Header(AmqpHeaders.DELIVERY_TAG) long deliveryTag) {
         consumeMessage(message, EmailType.NOTICE, deliveryTag);
     }
 }

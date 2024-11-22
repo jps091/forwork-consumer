@@ -16,13 +16,13 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class TempPasswordMailConsumer extends MailConsumer<TempPasswordMessage> {
 
-    public static final String USER_TEMP_PASSWORD_QUEUE = "user.temp.password.queue";
+    public static final String USER_PASSWORD = "user.password.q";
 
     public TempPasswordMailConsumer(MailSender mailSender, MailLogService mailLogService, RabbitTemplate rabbitTemplate) {
         super(mailSender, mailLogService, rabbitTemplate);
     }
 
-    @RabbitListener(queues = USER_TEMP_PASSWORD_QUEUE, containerFactory = "customRabbitListenerContainerFactory")
+    @RabbitListener(queues = USER_PASSWORD, containerFactory = "customRabbitListenerContainerFactory")
     public void sendTempPasswordMail(TempPasswordMessage message, @Header(AmqpHeaders.DELIVERY_TAG) long deliveryTag) {
         consumeMessage(message, EmailType.PASSWORD, deliveryTag);
     }

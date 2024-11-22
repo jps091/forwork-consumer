@@ -20,6 +20,7 @@ public class RabbitMqConfig {
         SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
         factory.setConnectionFactory(connectionFactory);
         factory.setMessageConverter(messageConverter);
+        factory.setDefaultRequeueRejected(false);
         return factory;
     }
 
@@ -28,7 +29,7 @@ public class RabbitMqConfig {
     public SimpleRabbitListenerContainerFactory customRabbitListenerContainerFactory(
             ConnectionFactory connectionFactory,
             MessageConverter messageConverter
-    ) {
+    ){
         SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
         factory.setConnectionFactory(connectionFactory);
         factory.setMessageConverter(messageConverter);

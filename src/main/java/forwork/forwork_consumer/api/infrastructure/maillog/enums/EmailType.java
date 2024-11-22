@@ -9,6 +9,7 @@ import lombok.Getter;
 public enum EmailType {
     BUYER("구매자"),
     SELLER("판매자"),
+    ADMIN("관리자"),
     VERIFY("인증"),
     NOTICE("공지"),
     PASSWORD("임시 비밀번호"),

@@ -18,13 +18,13 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class NoticeMailConsumer extends MailConsumer<NoticeMessage> {
 
-    private static final String USER_NOTICE_QUEUE = "user.notice.queue";
+    private static final String USER_NOTICE = "user.notice.q";
 
     public NoticeMailConsumer(MailSender mailSender, MailLogService mailLogService, RabbitTemplate rabbitTemplate) {
         super(mailSender, mailLogService, rabbitTemplate);
     }
 
-    @RabbitListener(queues = USER_NOTICE_QUEUE, containerFactory = "customRabbitListenerContainerFactory")
+    @RabbitListener(queues = USER_NOTICE, containerFactory = "customRabbitListenerContainerFactory")
     public void sendSalesRequestResultMail(NoticeMessage message, @Header(AmqpHeaders.DELIVERY_TAG) long deliveryTag) {
         consumeMessage(message, EmailType.NOTICE, deliveryTag);
     }

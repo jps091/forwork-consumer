@@ -23,7 +23,7 @@ import java.nio.charset.StandardCharsets;
 public class DlqConsumer {
 
     private static final String RETRY_COUNT_HEADER = "x-retries_count";
-    private static final String RETRY_QUEUE = "retry.queue";
+    private static final String RETRY = "retry.q";
 
     private final RabbitTemplate rabbitTemplate;
     private final MailLogService mailLogService;
@@ -32,7 +32,7 @@ public class DlqConsumer {
     @Value("${spring.rabbitmq.listener.simple.retry.max-attempts}")
     private int retryCount;
 
-    @RabbitListener(queues = RETRY_QUEUE, containerFactory = "customRabbitListenerContainerFactory")
+    @RabbitListener(queues = RETRY, containerFactory = "customRabbitListenerContainerFactory")
     public void processFailedMessagesRequeue(Message failedMessage) {
         Integer retriesCnt = (Integer) failedMessage.getMessageProperties().getHeaders()
                 .get(RETRY_COUNT_HEADER);

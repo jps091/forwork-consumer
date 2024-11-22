@@ -24,7 +24,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class AuthMailConsumer {
 
-    private static final String VERIFY_QUEUE = "verify.queue";
+    private static final String VERIFY = "verify.q";
     private static final String EMAIL_PREFIX = "email:";
     private final MailSender mailSender;
     private final MailLogService mailLogService;
@@ -32,7 +32,7 @@ public class AuthMailConsumer {
     private final UuidHolder uuidHolder;
     private final RabbitTemplate rabbitTemplate;
 
-    @RabbitListener(queues = VERIFY_QUEUE, containerFactory = "customRabbitListenerContainerFactory")
+    @RabbitListener(queues = VERIFY, containerFactory = "customRabbitListenerContainerFactory")
     public void sendVerifyCodeMail(String email, @Header(AmqpHeaders.DELIVERY_TAG) long deliveryTag) {
         try {
             AuthMessage authMessage = createMessage(email);
