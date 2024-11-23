@@ -1,6 +1,7 @@
 package forwork.forwork_consumer.api.infrastructure.mail;
 
 import forwork.forwork_consumer.api.consumer.MessageIfs;
+import forwork.forwork_consumer.api.exception.CustomSesException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import lombok.extern.slf4j.Slf4j;
@@ -54,7 +55,7 @@ public class MailSenderImpl implements MailSender {
             SendEmailResponse response = sesClient.sendEmail(request);
             log.info("Email sent successfully. Message ID: {}", response.messageId());
         } catch (Exception e) {
-            log.error("Failed to send email: {}", e.getMessage(), e);
+            throw new CustomSesException("Failed to SES", e);
         }
     }
 }

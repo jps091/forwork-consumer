@@ -1,21 +1,13 @@
 package forwork.forwork_consumer.api.consumer.auth;
 
 import forwork.forwork_consumer.api.consumer.auth.message.AuthMessage;
-import forwork.forwork_consumer.api.exception.InvalidEmailException;
 import forwork.forwork_consumer.api.infrastructure.redis.RedisStringUtils;
 import forwork.forwork_consumer.api.infrastructure.mail.MailSender;
 import forwork.forwork_consumer.api.infrastructure.uuid.UuidHolder;
-import forwork.forwork_consumer.api.service.MailLogService;
 import forwork.forwork_consumer.api.validator.EmailValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.amqp.AmqpRejectAndDontRequeueException;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.amqp.support.AmqpHeaders;
-import org.springframework.data.redis.RedisConnectionFailureException;
-import org.springframework.mail.MailAuthenticationException;
-import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Component;
 
 
@@ -24,26 +16,17 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class AuthMailConsumer {
 
-    private static final String VERIFY_QUEUE = "verify.queue";
+    private static final String VERIFY = "verify.q";
     private static final String EMAIL_PREFIX = "email:";
     private final MailSender mailSender;
-    private final MailLogService mailLogService;
     private final RedisStringUtils redisStringUtils;
     private final UuidHolder uuidHolder;
-    private final RabbitTemplate rabbitTemplate;
 
-    @RabbitListener(queues = VERIFY_QUEUE, containerFactory = "customRabbitListenerContainerFactory")
-    public void sendVerifyCodeMail(String email, @Header(AmqpHeaders.DELIVERY_TAG) long deliveryTag) {
-        try {
+    @RabbitListener(queues = VERIFY, containerFactory = "customRabbitListenerContainerFactory")
+    public void sendVerifyCodeMail(String email) {
             AuthMessage authMessage = createMessage(email);
             EmailValidator.validate(authMessage);
             mailSender.send(authMessage);
-
-        } catch (MailAuthenticationException | InvalidEmailException | RedisConnectionFailureException e) {
-            handleDiscardException(email, deliveryTag, e);
-        } catch (Exception e) {
-            throw new AmqpRejectAndDontRequeueException(e);
-        }
     }
 
     private AuthMessage createMessage(String email){
@@ -65,15 +48,6 @@ public class AuthMailConsumer {
 
     private String getKeyByEmail(String email) {
         return redisStringUtils.createKeyForm(EMAIL_PREFIX, email);
-    }
-
-    private void handleDiscardException(String email, long deliveryTag, Exception e) {
-        log.error("Exception occurred while sending mail to {}, discarding message", email, e);
-        mailLogService.registerFailLog(email, e);
-        rabbitTemplate.execute(channel -> {
-            channel.basicReject(deliveryTag, false);
-            return null;
-        });
     }
 }
 

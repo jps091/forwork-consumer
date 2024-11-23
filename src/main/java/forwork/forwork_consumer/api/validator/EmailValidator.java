@@ -23,6 +23,10 @@ public class EmailValidator {
             throw new InvalidEmailException("Email title cannot be null or blank.");
         }
 
+//        if(message.getEmail().equals("jaepill94@gmail.com")){
+//            throw new RuntimeException("test jaepil blank.");
+//        }
+
         // 내용 검증
         if (message.getContent() == null || message.getContent().trim().isEmpty()) {
             throw new InvalidEmailException("Email content cannot be null or blank.");

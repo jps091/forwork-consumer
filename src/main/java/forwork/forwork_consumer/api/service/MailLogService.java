@@ -3,12 +3,10 @@ package forwork.forwork_consumer.api.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import forwork.forwork_consumer.api.consumer.MessageIfs;
-import forwork.forwork_consumer.api.infrastructure.maillog.enums.EmailType;
 import forwork.forwork_consumer.api.infrastructure.maillog.MailLogEntity;
 import forwork.forwork_consumer.api.infrastructure.maillog.MailLogJpaRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,22 +20,16 @@ public class MailLogService {
     private final MailLogJpaRepository mailLogRepository;
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void registerFailLog(MessageIfs message, EmailType type, Exception e){
+    public void registerFailLog(MessageIfs message, Throwable e){
         String content = setMessageContent(message);
-        MailLogEntity mailLog = MailLogEntity.create(message.getEmail(), content, type, e);
+        MailLogEntity mailLog = MailLogEntity.create(message.getEmail(), content, e);
         mailLogRepository.save(mailLog);
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void registerFailLog(String email, Exception e){
-        MailLogEntity mailLog = MailLogEntity.create(email, e);
-        mailLogRepository.save(mailLog);
-    }
-
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void registerFailLog(MessageIfs message, EmailType type){
+    public void registerFailLog(MessageIfs message){
         String content = setMessageContent(message);
-        MailLogEntity mailLog = MailLogEntity.create(message.getEmail(), content, type);
+        MailLogEntity mailLog = MailLogEntity.create(message.getEmail(), content);
         mailLogRepository.save(mailLog);
     }
 

@@ -1,4 +1,4 @@
-package forwork.forwork_consumer.api.consumer.seller.message;
+package forwork.forwork_consumer.api.consumer.admin.message;
 
 import forwork.forwork_consumer.api.consumer.MessageIfs;
 import lombok.AllArgsConstructor;
@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class SellerMessage implements MessageIfs {
+public class AdminInquiryMessage implements MessageIfs {
     private String email;
     private String title;
     private String content;

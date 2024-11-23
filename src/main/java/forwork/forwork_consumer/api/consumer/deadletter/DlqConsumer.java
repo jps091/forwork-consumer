@@ -3,7 +3,6 @@ package forwork.forwork_consumer.api.consumer.deadletter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import forwork.forwork_consumer.api.consumer.deadletter.message.FailMessage;
-import forwork.forwork_consumer.api.infrastructure.maillog.enums.EmailType;
 import forwork.forwork_consumer.api.service.MailLogService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +22,7 @@ import java.nio.charset.StandardCharsets;
 public class DlqConsumer {
 
     private static final String RETRY_COUNT_HEADER = "x-retries_count";
-    private static final String RETRY_QUEUE = "retry.queue";
+    private static final String RETRY = "retry.q";
 
     private final RabbitTemplate rabbitTemplate;
     private final MailLogService mailLogService;
@@ -32,7 +31,7 @@ public class DlqConsumer {
     @Value("${spring.rabbitmq.listener.simple.retry.max-attempts}")
     private int retryCount;
 
-    @RabbitListener(queues = RETRY_QUEUE, containerFactory = "customRabbitListenerContainerFactory")
+    @RabbitListener(queues = RETRY, containerFactory = "customRabbitListenerContainerFactory")
     public void processFailedMessagesRequeue(Message failedMessage) {
         Integer retriesCnt = (Integer) failedMessage.getMessageProperties().getHeaders()
                 .get(RETRY_COUNT_HEADER);
@@ -41,7 +40,7 @@ public class DlqConsumer {
         }
         if (retriesCnt >= retryCount) {
             retryMailLogRegister(failedMessage);
-            log.error("Discarding message");
+            log.error("DLQ retry fail message discarding");
             return;
         }
         failedMessage.getMessageProperties().getHeaders().put(RETRY_COUNT_HEADER, ++retriesCnt);
@@ -54,14 +53,14 @@ public class DlqConsumer {
             log.error("exchange not valid={}", failedMessage);
             return;
         }
-
+        log.info("Retrying message for the {} time", retriesCnt);
         rabbitTemplate.send(originalExchange, originalRoutingKey, failedMessage);
     }
 
     private void retryMailLogRegister(Message failedMessage) {
         String messageBody = new String(failedMessage.getBody(), StandardCharsets.UTF_8);
         FailMessage message = parsing(messageBody);
-        mailLogService.registerFailLog(message, EmailType.RETRY);
+        mailLogService.registerFailLog(message);
     }
 
     private FailMessage parsing(String messageBody) {

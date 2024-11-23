@@ -1,6 +1,6 @@
-package forwork.forwork_consumer.api.consumer.password;
+package forwork.forwork_consumer.api.consumer.admin;
 
-import forwork.forwork_consumer.api.consumer.password.message.TempPasswordMessage;
+import forwork.forwork_consumer.api.consumer.admin.message.AdminInquiryMessage;
 import forwork.forwork_consumer.api.infrastructure.mail.MailSender;
 import forwork.forwork_consumer.api.validator.EmailValidator;
 import lombok.RequiredArgsConstructor;
@@ -12,16 +12,16 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-public class TempPasswordMailConsumer{
+public class AminInquiryMailConsumer{
 
-    public static final String USER_PASSWORD = "user.password.q";
+    public static final String USER_ADMIN_INQUIRY = "user.admin.inquiry.q";
     private final MailSender mailSender;
     protected final RabbitTemplate rabbitTemplate;
 
-    @RabbitListener(queues = USER_PASSWORD, containerFactory = "customRabbitListenerContainerFactory")
-    public void sendTempPasswordMail(TempPasswordMessage message) {
+    @RabbitListener(queues = USER_ADMIN_INQUIRY, containerFactory = "customRabbitListenerContainerFactory")
+    public void sendVerifyCodeMail(AdminInquiryMessage message) {
         EmailValidator.validate(message);
-        mailSender.send(message);
+        mailSender.sendBySes(message);
     }
 }
 
