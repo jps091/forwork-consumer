@@ -15,7 +15,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class OrderStatusUpdateService {
 
-    private final ResumeQuantityService resumeQuantityService;
     private final OrderResumeJpaRepository orderResumeJpaRepository;
     private final ClockHolder clockHolder;
 
@@ -24,14 +23,5 @@ public class OrderStatusUpdateService {
         List<OrderResumeEntity> orderResumes = orderResumeJpaRepository
                 .findByOrderEntity_IdAndResumeEntity_Id(message.getOrderId(), message.getResumeId());
         orderResumes.forEach(orderResume -> orderResume.updateStatusSent(clockHolder));
-
-        // resumeIds 추출
-        List<Long> resumeIds = orderResumes.stream()
-                .map(OrderResumeEntity::getResumeEntity)
-                .map(ResumeEntity::getId)
-                .toList();
-
-        resumeQuantityService.increaseSalesQuantityPessimistic(resumeIds); // 판매량 1증가
-        //resumeQuantityService.increaseSalesQuantity(resumeIds); // 판매량 1증가
     }
 }

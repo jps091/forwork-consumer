@@ -17,16 +17,17 @@ import java.util.List;
 public class TestController {
     private final ResumeQuantityService resumeQuantityService;
 
-    @RequestMapping(method = RequestMethod.POST, value = "/pes")
+    @RequestMapping(method = RequestMethod.POST, value = "/lettuce1")
     public ResponseEntity<String> pessimistic(
-    ){
-        resumeQuantityService.increaseSalesQuantityPessimistic(List.of(1L));
+    ) throws InterruptedException {
+        resumeQuantityService.increaseByLettuce(5L);
         return new ResponseEntity<>("confirm", HttpStatus.OK);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/")
-    public ResponseEntity<String> home(
-    ){
-        return new ResponseEntity<>("home", HttpStatus.OK);
+    @RequestMapping(method = RequestMethod.POST, value = "/lettuce2")
+    public ResponseEntity<String> pessimistic2(
+    ) throws InterruptedException {
+        resumeQuantityService.increaseByLettuce(6L);
+        return new ResponseEntity<>("confirm", HttpStatus.OK);
     }
 }

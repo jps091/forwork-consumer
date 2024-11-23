@@ -41,7 +41,7 @@ public class AuthMailConsumer {
     private String issueCertificationCode(String email){
         String certificationCode = uuidHolder.random();
         String key = getKeyByEmail(email);
-        redisStringUtils.setDataWithTimeout(key, certificationCode, 300L);
+        redisStringUtils.setValueWithTimeout(key, certificationCode, 300L);
 
         return certificationCode;
     }
