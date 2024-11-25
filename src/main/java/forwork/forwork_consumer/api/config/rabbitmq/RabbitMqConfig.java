@@ -5,7 +5,7 @@ import forwork.forwork_consumer.api.errorhandler.MyErrorHandler;
 import forwork.forwork_consumer.api.exception.MyFatalExceptionStrategy;
 import forwork.forwork_consumer.api.service.MailLogService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.amqp.core.AcknowledgeMode;
+import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
@@ -18,7 +18,7 @@ import org.springframework.util.ErrorHandler;
 @Configuration
 @RequiredArgsConstructor
 public class RabbitMqConfig {
-    // 커스텀 팩토리 등록
+
     private final ObjectMapper objectMapper;
     private final MailLogService mailLogService;
     private final MyFatalExceptionStrategy myFatalExceptionStrategy;
@@ -43,16 +43,6 @@ public class RabbitMqConfig {
     public ErrorHandler errorHandler() {
         return new MyErrorHandler(myFatalExceptionStrategy, objectMapper, mailLogService);
     }
-
-//    @Bean
-//    public ErrorHandler errorHandler() {
-//        return new CustomErrorHandler(fatalExceptionStrategy());
-//    }
-
-//    @Bean
-//    FatalExceptionStrategy fatalExceptionStrategy() {
-//        return new CustomFatalExceptionStrategy();
-//    }
 
     @Bean
     public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory, MessageConverter messageConverter) {
