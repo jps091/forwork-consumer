@@ -1,6 +1,6 @@
 # 📑 for-work - 이력서 쇼핑몰 README
 취업준비생 혹은 이직을 희망하는 사람들을 위해 모범이 되고 참고 할 수 있는 이력서를 판매하는 쇼핑몰 for-work 서버의 메일 전송을 담당하는 CONSUMER 서버 입니다.
-프로젝트 관련 회고 및 트러블 슈팅은 [여기](https://github.com/jps091/for-work/wiki)를 클릭 해주세요.
+프로젝트 관련 회고 및 트러블 슈팅은 [여기](https://github.com/jps091/for-work/wiki)를 클릭 해주세요. 
 
 ---
 
