@@ -29,7 +29,7 @@ public class ResumeQuantityService {
     public void syncRedisToDB(){
         Set<String> keys = redisStringUtils.getKeys("resume:*");
         if (keys == null || keys.isEmpty()) {
-            log.info("No keys found [syncRedisToDB]");
+            log.info("No keys found");
             return;
         }
 
@@ -39,23 +39,11 @@ public class ResumeQuantityService {
             resumeRepository.updateSalesQuantity(resumeId, quantity);
         });
 
-        // 불필요한 키 삭제
+        //
         syncData.keySet().forEach(key -> {
             if ("0".equals(redisStringUtils.getValue(key))) {
                 redisStringUtils.deleteKey(key);
             }
         });
-    }
-
-    public void increaseByLettuce(Long resumeId) throws InterruptedException {
-        while(!redisStringUtils.lock(resumeId)){
-            Thread.sleep(100);
-        }
-        try{
-            ResumeEntity resumeEntity = resumeRepository.findById(resumeId).orElseThrow();
-            resumeEntity.increaseSalesQuantity();
-        }finally {
-            redisStringUtils.unLock(resumeId);
-        }
     }
 }
